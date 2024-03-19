@@ -2,25 +2,31 @@ import heapq
 import random
 import time, threading
 
+# Selection Sort: Sorts an array by repeatedly finding the minimum element from the unsorted part and moving it to the beginning.
 def selection_sort(arr):
     n = len(arr)
     for i in range(n):
         min_index = i
+        # Find the index of the minimum element in the unsorted part
         for j in range(i+1, n):
             if arr[j] < arr[min_index]:
                 min_index = j
+        # Swap the found minimum element with the first element
         arr[i], arr[min_index] = arr[min_index], arr[i]
 
+# Insertion Sort: Builds the final sorted array one item at a time by repeatedly moving elements to their correct position.
 def insertion_sort(arr):
     n = len(arr)
     for i in range(1, n):
         key = arr[i]
         j = i - 1
+        # Move elements of arr[0..i-1] that are greater than key to one position ahead of their current position
         while j >= 0 and arr[j] > key:
             arr[j + 1] = arr[j]
             j -= 1
         arr[j + 1] = key
 
+# Merge Sort: Divide the unsorted array into two halves, sort each half, and then merge them.
 def merge_sort(arr):
     if len(arr) > 1:
         mid = len(arr) // 2
@@ -32,6 +38,7 @@ def merge_sort(arr):
 
         i = j = k = 0
 
+        # Merge the two sorted halves into a single sorted array
         while i < len(left_half) and j < len(right_half):
             if left_half[i] < right_half[j]:
                 arr[k] = left_half[i]
@@ -41,6 +48,7 @@ def merge_sort(arr):
                 j += 1
             k += 1
 
+        # Check for any remaining elements in left_half and right_half and add them to the sorted array
         while i < len(left_half):
             arr[k] = left_half[i]
             i += 1
@@ -51,6 +59,7 @@ def merge_sort(arr):
             j += 1
             k += 1
 
+# Quick Sort: Picks a pivot element and partitions the array around the pivot, such that elements smaller than the pivot are on its left and larger elements are on its right.
 def quick_sort(arr):
     if len(arr) <= 1:
         return arr
@@ -60,6 +69,7 @@ def quick_sort(arr):
         greater_than_pivot = [x for x in arr[1:] if x > pivot]
         return quick_sort(less_than_pivot) + [pivot] + quick_sort(greater_than_pivot)
 
+# Heap Sort: Builds a heap from the input array and then repeatedly extracts the maximum element from the heap and rebuilds the heap until the array is sorted.
 def heap_sort(arr):
     heapq.heapify(arr)
     sorted_arr = []
@@ -67,6 +77,7 @@ def heap_sort(arr):
         sorted_arr.append(heapq.heappop(arr))
     return sorted_arr
 
+# Counting Sort: Works by counting the number of occurrences of each unique element in the input array and using arithmetic to determine the positions of each element in the sorted output array.
 def counting_sort(arr: list[int]) -> list[int]:
     max_val = max(arr)
     min_val = min(arr)
@@ -78,6 +89,7 @@ def counting_sort(arr: list[int]) -> list[int]:
         sorted_arr.extend([i + min_val] * count[i])
     return sorted_arr
 
+# Radix Sort: Sorts numbers by considering individual digits at different positions, starting from the least significant digit to the most significant digit.
 def radix_sort(arr):
     # Sorting function for mixed data types
     numeric_values = []
@@ -88,7 +100,6 @@ def radix_sort(arr):
         else:
             string_values.append(value)
 
-
     # Sort numeric values
     numeric_values = sorted(numeric_values, key=lambda x: float(x))
 
@@ -97,22 +108,21 @@ def radix_sort(arr):
 
     # Combine the sorted lists
     sorted_arr = numeric_values + string_values
-
     return sorted_arr
 
+# Bucket Sort: Distributes the elements of an array into a number of buckets, then sorts each bucket individually, and finally merges the buckets.
 def bucket_sort(arr):
     strings = [x for x in arr if isinstance(x, str)]
     numbers = [x for x in arr if isinstance(x, (int, float))]
-    
+
     insertion_sort(strings)
-    
     insertion_sort(numbers)
-    
+
     # Combine the sorted lists
     sorted_arr = strings + numbers
-    
     return sorted_arr
 
+# Bubble Sort: Repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.
 def bubble_sort(arr):
     n = len(arr)
     for i in range(n):
@@ -124,6 +134,7 @@ def bubble_sort(arr):
         if not swapped:
             break
 
+# Shell Sort: An extension of insertion sort that allows the exchange of items that are far apart, thus producing partially sorted arrays that can be efficiently sorted.
 def shell_sort(arr):
     n = len(arr)
     gap = n // 2
@@ -137,9 +148,11 @@ def shell_sort(arr):
             arr[j] = temp
         gap //= 2
 
+# Timsort: A hybrid sorting algorithm derived from merge sort and insertion sort, designed to perform well on many kinds of real-world data.
 def timsort(arr):
     arr.sort()
 
+# Comb Sort: Improves on bubble sort by using a gap of size more than 1 and by shrinking the gap with each iteration.
 def comb_sort(arr):
     n = len(arr)
     gap = n
@@ -153,6 +166,7 @@ def comb_sort(arr):
                 arr[i], arr[i + gap] = arr[i + gap], arr[i]
                 swapped = True
 
+# Cycle Sort: A sorting algorithm that is theoretically optimal for uniformly distributed data, minimizing the number of memory writes to sort.
 def cycle_sort(arr):
     n = len(arr)
     for cycle_start in range(n - 1):
@@ -175,27 +189,29 @@ def cycle_sort(arr):
                 pos += 1
             arr[pos], item = item, arr[pos]
 
+# Cocktail Sort: A variation of bubble sort that sorts in both directions, rather than one, each pass through the array.
 def cocktail_sort(arr):
     n = len(arr)
     swapped = True
     start = 0
     end = n - 1
-    while (swapped == True):
+    while swapped == True:
         swapped = False
         for i in range(start, end):
-            if (arr[i] > arr[i + 1]):
+            if arr[i] > arr[i + 1]:
                 arr[i], arr[i + 1] = arr[i + 1], arr[i]
                 swapped = True
-        if (swapped == False):
+        if swapped == False:
             break
         swapped = False
         end = end - 1
         for i in range(end - 1, start - 1, -1):
-            if (arr[i] > arr[i + 1]):
+            if arr[i] > arr[i + 1]:
                 arr[i], arr[i + 1] = arr[i + 1], arr[i]
                 swapped = True
         start = start + 1
 
+# Gnome Sort: A sorting algorithm similar to insertion sort but moving elements to the correct position by a series of swaps, similar to how a gnome sorts out flower pots.
 def gnome_sort(arr):
     index = 0
     while index < len(arr):
@@ -207,6 +223,7 @@ def gnome_sort(arr):
             arr[index], arr[index - 1] = arr[index - 1], arr[index]
             index -= 1
 
+# Bitonic Sort: A parallel sorting algorithm based on the concept of merging two bitonic sequences (sequences that are initially monotonically increasing and then monotonically decreasing).
 def bitonic_sort(arr):
     def bitonic_merge(arr, up):
         if len(arr) <= 1:
@@ -233,6 +250,7 @@ def bitonic_sort(arr):
 
     bitonic_sort_recursive(arr, True)
 
+# Pancake Sort: A sorting algorithm that sorts a sequence by flipping the elements of the array like pancakes.
 def pancake_sort(arr):
     def flip(arr, i):
         arr[:i+1] = reversed(arr[:i+1])
@@ -244,6 +262,7 @@ def pancake_sort(arr):
                 flip(arr, max_idx)
             flip(arr, curr_size - 1)
 
+# Binary Insertion Sort: An enhancement of insertion sort that uses binary search to find the correct location to insert the current element.
 def binary_insertion_sort(arr):
     for i in range(1, len(arr)):
         x = arr[i]
@@ -257,7 +276,7 @@ def binary_insertion_sort(arr):
         arr[left + 1:i + 1] = arr[left:i]
         arr[left] = x
 
-#bogosort
+# Bogosort: A highly ineffective sorting algorithm that generates random permutations of the input array until it finds one that is sorted.
 def is_sorted(arr):
     return all(arr[i] <= arr[i + 1] for i in range(len(arr) - 1))
 
@@ -265,7 +284,7 @@ def bogosort(arr):
     while not is_sorted(arr):
         random.shuffle(arr)
 
-# Function to perform Strand Sort
+# Strand Sort: A sorting algorithm that repeatedly pulls sorted sublists out of the input array and merges them with a result array.
 def strand_sort(arr):
     result = []
     while arr:
@@ -290,6 +309,7 @@ def merge(left, right):
     result += right
     return result
 
+# Slow Sort: An intentionally inefficient sorting algorithm used for educational purposes, based on a divide-and-conquer approach.
 def slow_sort(arr):
     if len(arr) <= 1:
         return arr
@@ -300,6 +320,7 @@ def slow_sort(arr):
         left, right = right, left
     return left + right[:-1] + [left[-1]]
 
+# Stooge Sort: A recursive sorting algorithm that sorts the first 2/3 and the last 2/3 of an array recursively and then sorts the first 2/3 again.
 def stooge_sort(arr):
     if arr[0] > arr[-1]:
         arr[0], arr[-1] = arr[-1], arr[0]
@@ -309,6 +330,7 @@ def stooge_sort(arr):
         stooge_sort(arr[t:])
         stooge_sort(arr[:len(arr)-t])
 
+# Bead Sort: A natural sorting algorithm inspired by beads on an abacus, where elements are sorted by moving the beads to their appropriate positions.
 def bead_sort(arr):
     def transpose(beads):
         return [beads.count(i) for i in range(max(beads), 0, -1)]
@@ -320,6 +342,7 @@ def bead_sort(arr):
     for _ in range(n):
         beads = transpose(beads)
 
+# Sleep Sort: A sorting algorithm that sorts integers by creating a separate thread for each element and sleeping for a duration proportional to its value.
 def sleep_sort(arr):
     sorted_arr = []
 
@@ -338,11 +361,13 @@ def sleep_sort(arr):
 
     arr[:] = sorted_arr
 
+# Bozo Sort: An inefficient and humorous sorting algorithm that randomly shuffles the input array until it becomes sorted.
 def bozo_sort(arr):
     while not is_sorted(arr):
         a, b = random.sample(arr, 2)
         arr[arr.index(a)], arr[arr.index(b)] = arr[arr.index(b)], arr[arr.index(a)]
 
+# Odd-Even Sort: A variation of bubble sort that works in parallel by comparing and swapping pairs of elements in alternating odd-even passes.
 def odd_even_sort(arr):
     n = len(arr)
     sorted = False
@@ -357,7 +382,7 @@ def odd_even_sort(arr):
                 arr[i], arr[i+1] = arr[i+1], arr[i]
                 sorted = False
 
-#Function for Tree Sort
+# Tree Sort: A sorting algorithm that builds a binary search tree from the elements of the input array and performs an in-order traversal to obtain the sorted sequence.
 class TreeNode:
     def __init__(self, key):
         self.left = None
@@ -388,7 +413,7 @@ def tree_sort(arr):
     in_order_traversal(root, result)
     return result
 
-#Function for Cube Sort
+# Cube Sort: A sorting algorithm that sorts a list of numbers by recursively partitioning them into sublists and then sorting each sublist using the cube sort algorithm.
 def cube_sort(arr):
     n = len(arr)
     gap = n // 2
@@ -400,7 +425,7 @@ def cube_sort(arr):
         gap //= 2
     return arr
 
-#Function for Pigeonhole Sort
+# Pigeonhole Sort: A sorting algorithm that is suitable for sorting lists of elements where the number of elements and the range of possible key values are approximately the same.
 def pigeonhole_sort(arr):
     # Determine the minimum and maximum values in arr
     if all(isinstance(x, (int, float)) for x in arr):
